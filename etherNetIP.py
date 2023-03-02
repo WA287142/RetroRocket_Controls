@@ -13,8 +13,8 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((host, port))
 
 # create an instance of the driver for the Nanotec motor controller
-ip_addy = '192.168.1.100'
-with LogixDriver(ip_addy) as plc:
+ip_add = '192.168.1.100'
+with LogixDriver(ip_add) as plc:
     # read a tag from the device
     tag_value = plc.read_tag('MyTag')
 
