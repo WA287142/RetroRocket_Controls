@@ -1,5 +1,7 @@
 import socket
 from pycomm3 import LogixDriver
+import scapy
+
 
 ######### This file requires a server to be running prior to running this file ################
 ######### Need to run Server.py on a separate terminal to host the server ##################
@@ -25,3 +27,4 @@ with LogixDriver(ip_add) as plc:
 
 # close the socket connection
 sock.close()
+
