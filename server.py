@@ -1,4 +1,5 @@
 import socket
+import nanotec_nanolib
 
 try:
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

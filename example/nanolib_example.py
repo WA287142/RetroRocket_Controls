@@ -45,6 +45,19 @@ def object_dictionary_access_examples(nanolib_helper, device_handle):
     error_stack = nanolib_helper.read_array(device_handle, Nanolib.OdIndex(0x1003, 0x00))
     print('The error stack has {} elements\n'.format(error_stack[0]))
 
+###################################################################################################################################################
+
+def move_motor(device_handle, value):
+    print("Moving Motor")
+    home_page_od = Nanolib.OdIndex(0x6505, 0x00);
+    control_word_od = Nanolib.OdIndex(0x6040, 0x00);
+
+    object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
+    
+    nanolib_helper.write_number_od(object_dictionary, value, )
+
+###################################################################################################################################################
+
 def object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle):
     home_page_od = Nanolib.OdIndex(0x6505, 0x00);
     control_word_od = Nanolib.OdIndex(0x6040, 0x00);
@@ -159,21 +172,26 @@ if __name__ == '__main__':
     object_dictionary_access_examples(nanolib_helper, device_handle)
     object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle)
 
-    if(bus_hw_id.getBusHardware() == Nanolib.BUS_HARDWARE_ID_NETWORK):
-        profinet_dcp_interface = nanolib_helper.get_profinet_dcp_interface()
-        if(
-            profinet_dcp_interface.isServiceAvailable(bus_hw_id).hasError() == False
-        ):
-            if(askUser("Do you wish to proceed with Profinet DCP example?")):
-                profinetExample = ProfinetExample(bus_hw_id, profinet_dcp_interface)
-                profinetExample.execute()
+    # if(bus_hw_id.getBusHardware() == Nanolib.BUS_HARDWARE_ID_NETWORK):
+    #     profinet_dcp_interface = nanolib_helper.get_profinet_dcp_interface()
+    #     if(
+    #         profinet_dcp_interface.isServiceAvailable(bus_hw_id).hasError() == False
+    #     ):
+    #         if(askUser("Do you wish to proceed with Profinet DCP example?")):
+    #             profinetExample = ProfinetExample(bus_hw_id, profinet_dcp_interface)
+    #             profinetExample.execute()
         
-    if(askUser("Do you wish to proceed with sampler examples?")):
-        # samplerExample = SamplerExample(device_handle, nanolib_helper)
-        # print("")
-        # samplerExample.executeWithoutCallback()
-        # samplerExample.executeWithCallback()
-        upNanoJ = Nanolib.NanoLibAccessor.uploadNanoJFromFile(bus_hw_id,device_handle, r"C:\Users\Public\Downloads\Example_1_Velocity_Mode\vmmcode.cpp", Nanolib.NlcCallback.callback(bus_hw_id))
+    # if(askUser("Do you wish to proceed with sampler examples?")):
+    #     # samplerExample = SamplerExample(device_handle, nanolib_helper)
+    #     # print("")
+    #     # samplerExample.executeWithoutCallback()
+    #     # samplerExample.executeWithCallback()
+    #     upNanoJ = Nanolib.NanoLibAccessor.uploadNanoJFromFile(bus_hw_id,device_handle, r"C:\Users\Public\Downloads\Example_1_Velocity_Mode\vmmcode.cpp", Nanolib.NlcCallback.callback(bus_hw_id))
+
+
+
+
+
 
     # cleanup and close everything
     nanolib_helper.disconnect_device(device_handle)
