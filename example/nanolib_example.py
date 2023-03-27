@@ -47,14 +47,45 @@ def object_dictionary_access_examples(nanolib_helper, device_handle):
 
 ###################################################################################################################################################
 
-def move_motor(device_handle, value):
+def move_motor(nanolib_helper, device_handle, value):
     print("Moving Motor")
     home_page_od = Nanolib.OdIndex(0x6505, 0x00);
     control_word_od = Nanolib.OdIndex(0x6040, 0x00);
 
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
     
-    nanolib_helper.write_number_od(object_dictionary, value, )
+    # Setting the Mode of Operation to Profile Position Mode
+    nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
+
+    # Make sure motor starts out as off by resetting motor controls
+    nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
+    print("Controls")
+    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
+    
+    # Set the units for the motor
+    # degrees = 41h
+    nanolib_helper.write_number_od(object_dictionary, 65, Nanolib.OdIndex(0x60A8, 0x00))
+    print("Units")
+    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
+
+    # Set the Target Position (000001388 is 5000)
+    nanolib_helper.write_number_od(object_dictionary, 0xFA0, Nanolib.OdIndex(0x607A, 0x00))
+
+    print("Target Position")
+    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
+
+    # Set the units (m, in, ft)
+    #nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
+
+    # Set the Controls
+    # 11111 = 31
+    # 1111 = 15
+    # 111111 = 63
+    # 1011111 = 95
+    nanolib_helper.write_number_od(object_dictionary, 31, Nanolib.OdIndex(0x6040, 0x00))
+    print("Final Controls")
+    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
+
 
 ###################################################################################################################################################
 
@@ -169,9 +200,10 @@ if __name__ == '__main__':
 
     # now ready to work with the controller, here are some examples on how to access the
     # object dictionary:
-    object_dictionary_access_examples(nanolib_helper, device_handle)
-    object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle)
+    # object_dictionary_access_examples(nanolib_helper, device_handle)
+    # object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle)
 
+    move_motor(nanolib_helper, device_handle, 0)
     # if(bus_hw_id.getBusHardware() == Nanolib.BUS_HARDWARE_ID_NETWORK):
     #     profinet_dcp_interface = nanolib_helper.get_profinet_dcp_interface()
     #     if(
