@@ -38,7 +38,7 @@ def move_motor(nanolib_helper, device_handle, value):
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 
     # Set the Target Position (000001388 is 5000)
-    nanolib_helper.write_number_od(object_dictionary, 0xFA0, Nanolib.OdIndex(0x607A, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, hex(value), Nanolib.OdIndex(0x607A, 0x00))
 
     print("Target Position")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
