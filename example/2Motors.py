@@ -40,7 +40,7 @@ def move_motor(nanolib_helper, device_handle, value):
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 
     # Set the Target Position (000001388 is 5000)
-    nanolib_helper.write_number_od(object_dictionary, hex(value), Nanolib.OdIndex(0x607A, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, value, Nanolib.OdIndex(0x607A, 0x00))
 
     print("Target Position")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
@@ -73,7 +73,7 @@ for bus_hardware_id in bus_hardware_ids:
     
 # Use the selected bus hardware
 # 5 is the USB connection
-bus_hw_id = bus_hardware_ids[5]
+bus_hw_id = bus_hardware_ids[6]
 
 # create bus hardware options for opening the hardware
 bus_hw_options = nanolib_helper.create_bus_hardware_options(bus_hw_id)
@@ -134,12 +134,18 @@ print("")
 print("Controller 2 Obj Dict: ", object_dictionary1)
 
 # Moves the motors to position 0
-move_motor(nanolib_helper, device1_handle, 0)
-move_motor(nanolib_helper, device2_handle, 0)
+#move_motor(nanolib_helper, device1_handle, 0)
+#move_motor(nanolib_helper, device2_handle, 0)
 
+val = int(input("Enter angle: "))
+
+while(val != -1):
+    move_motor(nanolib_helper, device1_handle, val)
+    move_motor(nanolib_helper, device2_handle, val)
+    val = int(input("Enter angle: "))
 # Moves the motors to position 2000
-move_motor(nanolib_helper, device1_handle, 0x7D0)
-move_motor(nanolib_helper, device2_handle, 0x7D0)
+#move_motor(nanolib_helper, device1_handle, 0x7D0)
+#move_motor(nanolib_helper, device2_handle, 0x7D0)
 
 
 # print('Motor 1 Stop (0x6040-0)')

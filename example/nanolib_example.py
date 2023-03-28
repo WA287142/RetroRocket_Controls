@@ -76,7 +76,7 @@ def move_motor(nanolib_helper, device_handle, value):
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 
     # Set the Target Position (000001388 is 5000)
-    nanolib_helper.write_number_od(object_dictionary, 0xFA0, Nanolib.OdIndex(0x607A, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, value, Nanolib.OdIndex(0x607A, 0x00))
 
     print("Target Position")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
@@ -90,7 +90,7 @@ def move_motor(nanolib_helper, device_handle, value):
     # 1111 = 15
     # 111111 = 63
     # 1011111 = 95
-    nanolib_helper.write_number_od(object_dictionary, 31, Nanolib.OdIndex(0x6040, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, 63, Nanolib.OdIndex(0x6040, 0x00))
     print("Final Controls")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
 
@@ -211,6 +211,13 @@ if __name__ == '__main__':
     object_dictionary_access_examples(nanolib_helper, device_handle)
     object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle)
 
+    val = int(input("Enter angle: "))
+
+    while(val != -1):
+        move_motor(nanolib_helper, device_handle, val)
+        val = int(input("Enter angle: "))
+
+    
     # if(bus_hw_id.getBusHardware() == Nanolib.BUS_HARDWARE_ID_NETWORK):
     #     profinet_dcp_interface = nanolib_helper.get_profinet_dcp_interface()
     #     if(
