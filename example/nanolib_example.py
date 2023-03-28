@@ -71,7 +71,7 @@ def move_motor(nanolib_helper, device_handle, value):
     
     # Set the units for the motor
     # degrees = 41h
-    nanolib_helper.write_number_od(object_dictionary, 65, Nanolib.OdIndex(0x60A8, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, 0x00410000, Nanolib.OdIndex(0x60A8, 0x00))
     print("Units")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 

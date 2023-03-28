@@ -7,6 +7,7 @@ from nanolib_profinet_example import ProfinetExample
 from nanolib_sampler_example import SamplerExample
 
 nanolib_helper = NanolibHelper()
+# NOTE: Each digit of hex is 4 bits.
 
 # For object 6040h,
     # Bit 4 - start travel command by setting it to 1
@@ -33,7 +34,8 @@ def move_motor(nanolib_helper, device_handle, value):
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
     
     # Set the units for the motor. Value for Degrees = 41h
-    nanolib_helper.write_number_od(object_dictionary, 65, Nanolib.OdIndex(0x60A8, 0x00))
+    # First 16 bits are reserved values
+    nanolib_helper.write_number_od(object_dictionary, 0x00410000, Nanolib.OdIndex(0x60A8, 0x00))
     print("Units")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 
@@ -64,6 +66,11 @@ nanolib_helper.setup()
  # list all hardware available, decide for the first one
 bus_hardware_ids = nanolib_helper.get_bus_hardware()
 
+line_num = 0
+for bus_hardware_id in bus_hardware_ids:
+        print('{}. {} with protocol: {}'.format(line_num, bus_hardware_id.getName(), bus_hardware_id.getProtocol()))
+        line_num += 1
+    
 # Use the selected bus hardware
 # 5 is the USB connection
 bus_hw_id = bus_hardware_ids[5]
@@ -123,6 +130,7 @@ object_dictionary2 = nanolib_helper.get_device_object_dictionary(device2_handle)
 
 
 print("Controller 1 Obj Dict: ", object_dictionary1)
+print("")
 print("Controller 2 Obj Dict: ", object_dictionary1)
 
 # Moves the motors to position 0
