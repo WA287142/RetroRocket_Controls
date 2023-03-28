@@ -27,12 +27,12 @@ def move_motor(nanolib_helper, device_handle, value):
     nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
 
     # Make sure motor starts out as off by resetting motor controls
+    # 10110 = 22 -> Use this value to reset the motor so you can update target position
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
     print("Controls")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
     
-    # Set the units for the motor
-    # degrees = 41h
+    # Set the units for the motor. Value for Degrees = 41h
     nanolib_helper.write_number_od(object_dictionary, 65, Nanolib.OdIndex(0x60A8, 0x00))
     print("Units")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
@@ -42,9 +42,6 @@ def move_motor(nanolib_helper, device_handle, value):
 
     print("Target Position")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
-
-    # Set the units (m, in, ft)
-    #nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
 
     # Set the Controls
     # 10110 = 22 -> Use this value to reset the motor so you can update target position
@@ -57,14 +54,12 @@ def move_motor(nanolib_helper, device_handle, value):
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
 
 
+################################################# MAIN ####################################
 
-
-
+nanolib_helper = NanolibHelper()
 
 # create access to the nanolib
 nanolib_helper.setup()
-    
-print('Nanolib Example')
 
  # list all hardware available, decide for the first one
 bus_hardware_ids = nanolib_helper.get_bus_hardware()
