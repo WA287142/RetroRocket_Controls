@@ -46,6 +46,13 @@ def object_dictionary_access_examples(nanolib_helper, device_handle):
     print('The error stack has {} elements\n'.format(error_stack[0]))
 
 ###################################################################################################################################################
+# For object 6040h,
+    # Bit 4 - start travel command by setting it to 1
+    # Bit 5 - a travel command triggered by bit 4 is executed
+    # Bit 6 - at value 0, the target position 607Ah is absolute
+    #       - at value 1, target position 607Ah is relative
+    # Bit 8 - at value 1, motor stops
+# Need to change object index 6060h to 1 for Profile Position Mode
 
 def move_motor(nanolib_helper, device_handle, value):
     print("Moving Motor")
@@ -78,7 +85,8 @@ def move_motor(nanolib_helper, device_handle, value):
     #nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
 
     # Set the Controls
-    # 11111 = 31
+    # 10110 = 22 -> Use this value to reset the motor so you can update target position
+    # 11111 = 31 -> You want this to run your motor
     # 1111 = 15
     # 111111 = 63
     # 1011111 = 95
@@ -200,10 +208,9 @@ if __name__ == '__main__':
 
     # now ready to work with the controller, here are some examples on how to access the
     # object dictionary:
-    # object_dictionary_access_examples(nanolib_helper, device_handle)
-    # object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle)
+    object_dictionary_access_examples(nanolib_helper, device_handle)
+    object_dictionary_access_examples_via_dictionary_interface(nanolib_helper, device_handle)
 
-    move_motor(nanolib_helper, device_handle, 0)
     # if(bus_hw_id.getBusHardware() == Nanolib.BUS_HARDWARE_ID_NETWORK):
     #     profinet_dcp_interface = nanolib_helper.get_profinet_dcp_interface()
     #     if(
