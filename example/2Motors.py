@@ -163,10 +163,10 @@ nanolib_helper = NanolibHelper()
 nanolib_helper.setup()
 
 ##### Everything in this section below should be turned into a function for better readability #####
+# Uncomment this section if the connect_motor() does not work. This section is proven to work
 
-
-# list all hardware available, decide for the first one
-""" bus_hardware_ids = nanolib_helper.get_bus_hardware()
+"""# list all hardware available, decide for the first one
+ bus_hardware_ids = nanolib_helper.get_bus_hardware()
 
 line_num = 0
 for bus_hardware_id in bus_hardware_ids:
