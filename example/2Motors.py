@@ -196,8 +196,8 @@ motor2 = connect_motor(nanolib_helper, 1)
 # ###############################################################################
 # Runs through 360 degrees of motion in 1 degree increments
 for i in range(1,361):
-    move_motor(nanolib_helper, device1_handle, i)
-    move_motor(nanolib_helper, device2_handle, i)
+    move_motor(nanolib_helper, motor1, i)
+    move_motor(nanolib_helper, motor2, i)
 
 
 # Disconnect the motor
