@@ -62,7 +62,7 @@ def move_motor(nanolib_helper, device_handle, value):
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
     
     # Setting the Mode of Operation to Profile Position Mode
-    nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
+    # nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
 
     # Make sure motor starts out as off by resetting motor controls
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
@@ -71,12 +71,12 @@ def move_motor(nanolib_helper, device_handle, value):
     
     # Set the units for the motor
     # degrees = 41h
-    nanolib_helper.write_number_od(object_dictionary, 65, Nanolib.OdIndex(0x60A8, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, 0x00410000, Nanolib.OdIndex(0x60A8, 0x00))
     print("Units")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 
-    # Set the Target Position (000001388 is 5000)
-    nanolib_helper.write_number_od(object_dictionary, 0xFA0, Nanolib.OdIndex(0x607A, 0x00))
+    # Set the Target Position 
+    nanolib_helper.write_number_od(object_dictionary, value, Nanolib.OdIndex(0x607A, 0x00))
 
     print("Target Position")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
@@ -208,7 +208,16 @@ if __name__ == '__main__':
     # now connect to the device
     nanolib_helper.connect_device(device_handle)
 
-    move_motor(nanolib_helper, device_handle, 0)
+    # move_motor(nanolib_helper, device_handle, 0)
+
+    # Allows User to input desired angle for both motors until -1 is entered
+
+    val = int(input("Enter angle: "))
+
+    while(val != -1):
+        move_motor(nanolib_helper, device_handle, val)
+      
+        val = int(input("Enter angle: "))
     # now ready to work with the controller, here are some examples on how to access the
     # object dictionary:
     # object_dictionary_access_examples(nanolib_helper, device_handle)

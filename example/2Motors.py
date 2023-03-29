@@ -1,5 +1,6 @@
 import sys
 import socket
+import time
 sys.path.insert(8, r'C:\Users\Public\Downloads\NanoLib_1.0.1\NanoLib_Python_Windows\nanotec_nanolib_win-1.0.1\nanotec_nanolib')
 
 from nanotec_nanolib import Nanolib
@@ -77,7 +78,7 @@ def move_motor(nanolib_helper, device_handle, value):
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
     
     # Set the units for the motor. Value for Degrees = 41h
-    # First 16 bits are reserved values
+    # First 16 bits are reserved values and each hex digit is 4 bits
     nanolib_helper.write_number_od(object_dictionary, 0x00410000, Nanolib.OdIndex(0x60A8, 0x00))
     print("Units")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
@@ -226,7 +227,7 @@ print("Controller 2 Obj Dict: ", object_dictionary1) """
 
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
-motor1 = connect_motor(nanolib_helper, 0)
+# motor1 = connect_motor(nanolib_helper, 0)
 motor2 = connect_motor(nanolib_helper, 1)
 
 # Allows User to input desired angle for both motors until -1 is entered
@@ -241,14 +242,20 @@ motor2 = connect_motor(nanolib_helper, 1)
 
 # ###############################################################################
 # Runs through 360 degrees of motion in 1 degree increments
+
+# Move the motor to position 0 before beginning
+move_motor(nanolib_helper, motor2, 0)
+time.sleep(3)
+
 for i in range(1,361):
-    move_motor(nanolib_helper, motor1, i)
-    move_motor(nanolib_helper, motor2, i)
+    # move_motor(nanolib_helper, motor1, i)
+    move_motor(nanolib_helper, motor2, i*2)
+    time.sleep(.05)
 
 
 # Disconnect the motor
 
-nanolib_helper.disconnect_device(motor1)
+# nanolib_helper.disconnect_device(motor1)
 nanolib_helper.disconnect_device(motor2)
 
 # bus_hw_id isnt accessible bc it is inside the scope of the connect_motor() function
@@ -256,3 +263,7 @@ nanolib_helper.disconnect_device(motor2)
 
 print("Closing everything successfully")
     
+
+
+# NOTE: I set the object 6080h to 100 to fix the motor speed. It was originally set to 30000 and I don't know the units
+#       Supposedly the units are user defined so I'm guessing it was 30000 deg/sec or smth.
