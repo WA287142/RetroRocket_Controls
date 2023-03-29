@@ -55,6 +55,59 @@ def move_motor(nanolib_helper, device_handle, value):
     print("Final Controls")
     print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
 
+# Connect motor needs nanolib_helper and the device # of the motor (ex. 0, 1, 2)
+def connect_motor(nanolib_helper, motorID):
+    # list all hardware available, decide for the first one
+    bus_hardware_ids = nanolib_helper.get_bus_hardware()
+
+    line_num = 0
+    for bus_hardware_id in bus_hardware_ids:
+            print('{}. {} with protocol: {}'.format(line_num, bus_hardware_id.getName(), bus_hardware_id.getProtocol()))
+            line_num += 1
+        
+    # Use the selected bus hardware
+    # 5 is the USB connection
+    bus_hw_id = bus_hardware_ids[6]
+
+    # create bus hardware options for opening the hardware
+    bus_hw_options = nanolib_helper.create_bus_hardware_options(bus_hw_id)
+
+    # now able to open the hardware itself
+    nanolib_helper.open_bus_hardware(bus_hw_id, bus_hw_options)
+
+    # either scan the whole bus for devices (in case the bus supports scanning)
+    device_ids = nanolib_helper.scan_bus(bus_hw_id)
+
+    print("")
+    for device_id in device_ids:
+        print("Found Device: {}".format(device_id.toString()))
+        
+    if (device_ids.size() == 0):
+        raise Exception('No devices found.')
+
+    print('\nAvailable devices:\n')
+
+    line_num = 0
+    # just for better overview: print out available hardware
+    for id in device_ids:
+        print('{}. {} [device id: {}, hardware: {}]'.format(line_num, id.getDescription(), id.getDeviceId(), id.getBusHardwareId().getName()))
+        line_num += 1
+
+    # Select Device on Bus
+    device_id = device_ids[motorID]
+
+    device_handle = nanolib_helper.create_device(device_id)
+
+    # now connect to the device
+    nanolib_helper.connect_device(device_handle)
+
+    object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
+
+    print("Motor ", motorID, " Object Dictionary: ", object_dictionary)
+
+    return device_handle
+
+
 
 ################################################# MAIN ####################################
 
@@ -63,8 +116,11 @@ nanolib_helper = NanolibHelper()
 # create access to the nanolib
 nanolib_helper.setup()
 
- # list all hardware available, decide for the first one
-bus_hardware_ids = nanolib_helper.get_bus_hardware()
+##### Everything in this section below should be turned into a function for better readability #####
+
+
+# list all hardware available, decide for the first one
+""" bus_hardware_ids = nanolib_helper.get_bus_hardware()
 
 line_num = 0
 for bus_hardware_id in bus_hardware_ids:
@@ -99,19 +155,6 @@ for id in device_ids:
     print('{}. {} [device id: {}, hardware: {}]'.format(line_num, id.getDescription(), id.getDeviceId(), id.getBusHardwareId().getName()))
     line_num += 1
 
-# print('\nPlease select (enter) device number(0-{}) and press [ENTER]:'.format(line_num - 1), end ='');
-
-# line_num = int(input())
-
-
-# print('');
-# if ((line_num < 0) or (line_num >= device_ids.size())):
-#     raise Exception('Invalid selection!')
-
-# We can create the device id manually    
-# device_id = Nanolib.DeviceId(bus_hw_id, 1, "")
-# or select first found device on the bus
-
 # Changed this to take in two motor devices ####
 device1_id = device_ids[0]
 device2_id = device_ids[1]
@@ -131,26 +174,39 @@ object_dictionary2 = nanolib_helper.get_device_object_dictionary(device2_handle)
 
 print("Controller 1 Obj Dict: ", object_dictionary1)
 print("")
-print("Controller 2 Obj Dict: ", object_dictionary1)
+print("Controller 2 Obj Dict: ", object_dictionary1) """
 
-# Moves the motors to position 0
-#move_motor(nanolib_helper, device1_handle, 0)
-#move_motor(nanolib_helper, device2_handle, 0)
+###############################################################################
 
-val = int(input("Enter angle: "))
+# Use Connect_motor() to connect to both motors
+# the id is equivalent to the index that the device will show up as in example.py
+motor1 = connect_motor(nanolib_helper, 0)
+motor2 = connect_motor(nanolib_helper, 1)
 
-while(val != -1):
-    move_motor(nanolib_helper, device1_handle, val)
-    move_motor(nanolib_helper, device2_handle, val)
-    val = int(input("Enter angle: "))
-# Moves the motors to position 2000
-#move_motor(nanolib_helper, device1_handle, 0x7D0)
-#move_motor(nanolib_helper, device2_handle, 0x7D0)
+# Allows User to input desired angle for both motors until -1 is entered
+
+# val = int(input("Enter angle: "))
+
+# while(val != -1):
+#     move_motor(nanolib_helper, device1_handle, val)
+#     move_motor(nanolib_helper, device2_handle, val)
+#     val = int(input("Enter angle: "))
+# ###############################################################################
+
+# ###############################################################################
+# Runs through 360 degrees of motion in 1 degree increments
+for i in range(1,361):
+    move_motor(nanolib_helper, device1_handle, i)
+    move_motor(nanolib_helper, device2_handle, i)
 
 
-# print('Motor 1 Stop (0x6040-0)')
-# status_word = nanolib_helper.write_number_od(object_dictionary1, 6, Nanolib.OdIndex(0x6040, 0x00))
+# Disconnect the motor
 
-# print('Motor 2 Stop (0x6040-0)')
-# status_word = nanolib_helper.write_number_od(object_dictionary2, 6, Nanolib.OdIndex(0x6040, 0x00))
+nanolib_helper.disconnect_device(motor1)
+nanolib_helper.disconnect_device(motor2)
 
+# bus_hw_id isnt accessible bc it is inside the scope of the connect_motor() function
+# nanolib_helper.close_bus_hardware(bus_hw_id)
+
+print("Closing everything successfully")
+    
