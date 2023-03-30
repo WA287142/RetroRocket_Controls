@@ -231,7 +231,7 @@ print("Controller 2 Obj Dict: ", object_dictionary1) """
 
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
-# motor1 = connect_motor(nanolib_helper, 0)
+# motor1 = MF.connect_motor(nanolib_helper, 0)
 motor2 = MF.connect_motor(nanolib_helper, 1)
 
 # Allows User to input desired angle for both motors until -1 is entered
@@ -252,8 +252,8 @@ MF.move_motor(nanolib_helper, motor2, 0)
 time.sleep(3)
 
 for i in range(1,361):
-    # move_motor(nanolib_helper, motor1, i)
-    MF.move_motor(nanolib_helper, motor2, i*2)
+    # MF.move_motor(nanolib_helper, motor1, i)
+    MF.move_motor(nanolib_helper, motor2, i)
     time.sleep(.05)
 
 
