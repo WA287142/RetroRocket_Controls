@@ -1,12 +1,16 @@
+# Purpose of this program is to connect to and control two Nanotec motors simultaneously
+
 import sys
 import socket
 import time
 sys.path.insert(8, r'C:\Users\Public\Downloads\NanoLib_1.0.1\NanoLib_Python_Windows\nanotec_nanolib_win-1.0.1\nanotec_nanolib')
 
+import motorFunctions as MF
 from nanotec_nanolib import Nanolib
 from nanolib_helper import NanolibHelper
 from nanolib_profinet_example import ProfinetExample
 from nanolib_sampler_example import SamplerExample
+
 
 
 # This is to create the server to connect to. Need to move the main code into the nested while loop when ready
@@ -228,7 +232,7 @@ print("Controller 2 Obj Dict: ", object_dictionary1) """
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
 # motor1 = connect_motor(nanolib_helper, 0)
-motor2 = connect_motor(nanolib_helper, 1)
+motor2 = MF.connect_motor(nanolib_helper, 1)
 
 # Allows User to input desired angle for both motors until -1 is entered
 
@@ -244,12 +248,12 @@ motor2 = connect_motor(nanolib_helper, 1)
 # Runs through 360 degrees of motion in 1 degree increments
 
 # Move the motor to position 0 before beginning
-move_motor(nanolib_helper, motor2, 0)
+MF.move_motor(nanolib_helper, motor2, 0)
 time.sleep(3)
 
 for i in range(1,361):
     # move_motor(nanolib_helper, motor1, i)
-    move_motor(nanolib_helper, motor2, i*2)
+    MF.move_motor(nanolib_helper, motor2, i*2)
     time.sleep(.05)
 
 
