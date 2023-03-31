@@ -15,7 +15,7 @@ client_socket.connect(server_address)
 data = input("Enter data: ")
 while data != 0:
     client_socket.send(data.encode())
-    data = input("Enter data: ")
+    data = input("Enter data:")
     msg = client_socket.recv(1024)
     print(msg.decode())
 

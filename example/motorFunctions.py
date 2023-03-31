@@ -21,7 +21,16 @@ from nanolib_sampler_example import SamplerExample
     # Bit 8 - at value 1, motor stops
 # Need to change object index 6060h to 1 for Profile Position Mode
 
-def move_motor(nanolib_helper, device_handle, value):
+# Set the max motor speed
+def setMaxSpeed(nanolib_helper, device_handle, maxSpeed):
+    print("Setting max motor speed to ", maxSpeed)
+
+    object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
+    nanolib_helper.write_number_od(object_dictionary, maxSpeed, Nanolib.OdIndex(0x6080, 0x00))
+
+# Move the motor. value - the position or distance to move to
+#                 relative - if 1, position is relative. otherwise position is absolute
+def move_motor(nanolib_helper, device_handle, value, mode):
     print("Moving Motor to angle: ", value)
     home_page_od = Nanolib.OdIndex(0x6505, 0x00);
     control_word_od = Nanolib.OdIndex(0x6040, 0x00);
@@ -56,7 +65,13 @@ def move_motor(nanolib_helper, device_handle, value):
     # 1111 = 15
     # 111111 = 63
     # 1011111 = 95
-    nanolib_helper.write_number_od(object_dictionary, 31, Nanolib.OdIndex(0x6040, 0x00))
+    if mode == 'rel':  
+        nanolib_helper.write_number_od(object_dictionary, 95, Nanolib.OdIndex(0x6040, 0x00))
+    elif mode == 'abs':
+        nanolib_helper.write_number_od(object_dictionary, 31, Nanolib.OdIndex(0x6040, 0x00))
+    else:
+        print("invalid position mode. Needs to be 'abs' or 'rel'")
+        sys.exit()
     # print("Final Controls")
     # print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
 
@@ -110,6 +125,11 @@ def connect_motor(nanolib_helper, motorID):
 
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
 
-    print("Motor ", motorID, " Object Dictionary: ", object_dictionary)
+    # Setting the Mode of Operation to Profile Position Mode
+    # You may need this to set the controller mode the first time you run it
+    nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
+
+    # print("Motor ", motorID, " Object Dictionary: ", object_dictionary)
+
 
     return device_handle

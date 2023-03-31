@@ -33,8 +33,12 @@ motor1 = MF.connect_motor(nanolib_helper, 0)
 motor2 = MF.connect_motor(nanolib_helper, 0)
 
 # Move the motor to position 0 before beginning
-MF.move_motor(nanolib_helper, motor1, 0)
-MF.move_motor(nanolib_helper, motor2, 0)
+# 
+MF.setMaxSpeed(nanolib_helper, motor1, 200)
+MF.setMaxSpeed(nanolib_helper, motor2, 200)
+MF.move_motor(nanolib_helper, motor1, 0, 'rel')
+MF.move_motor(nanolib_helper, motor2, 0, 'rel')
+
 time.sleep(2)
 
 
@@ -73,8 +77,8 @@ while True:
         data = data.decode()
         print("Client says: "+ data)
 
-        MF.move_motor(nanolib_helper, motor1, int(data))
-        MF.move_motor(nanolib_helper, motor2, int(data))
+        MF.move_motor(nanolib_helper, motor1, int(data), 'abs')
+        MF.move_motor(nanolib_helper, motor2, int(data), 'abs')
         conn.sendall('Server received message'.encode())
 
 
