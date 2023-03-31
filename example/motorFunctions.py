@@ -5,6 +5,7 @@ import socket
 import time
 sys.path.insert(8, r'C:\Users\Public\Downloads\NanoLib_1.0.1\NanoLib_Python_Windows\nanotec_nanolib_win-1.0.1\nanotec_nanolib')
 
+
 from nanotec_nanolib import Nanolib
 from nanolib_helper import NanolibHelper
 from nanolib_profinet_example import ProfinetExample
@@ -21,32 +22,33 @@ from nanolib_sampler_example import SamplerExample
 # Need to change object index 6060h to 1 for Profile Position Mode
 
 def move_motor(nanolib_helper, device_handle, value):
-    print("Moving Motor")
+    print("Moving Motor to angle: ", value)
     home_page_od = Nanolib.OdIndex(0x6505, 0x00);
     control_word_od = Nanolib.OdIndex(0x6040, 0x00);
 
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
     
     # Setting the Mode of Operation to Profile Position Mode
+    # You may need this to set the controller mode the first time you run it
     #nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
 
     # Make sure motor starts out as off by resetting motor controls
     # 10110 = 22 -> Use this value to reset the motor so you can update target position
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
-    print("Controls")
-    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
+    # print("Controls")
+    # print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
     
     # Set the units for the motor. Value for Degrees = 41h
     # First 16 bits are reserved values and each hex digit is 4 bits
     nanolib_helper.write_number_od(object_dictionary, 0x00410000, Nanolib.OdIndex(0x60A8, 0x00))
-    print("Units")
-    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
+    # print("Units")
+    # print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x60A8, 0x00)))
 
     # Set the Target Position (000001388 is 5000)
     nanolib_helper.write_number_od(object_dictionary, value, Nanolib.OdIndex(0x607A, 0x00))
 
-    print("Target Position")
-    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
+    # print("Target Position")
+    # print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x607A, 0x00)))
 
     # Set the Controls
     # 10110 = 22 -> Use this value to reset the motor so you can update target position
@@ -55,8 +57,8 @@ def move_motor(nanolib_helper, device_handle, value):
     # 111111 = 63
     # 1011111 = 95
     nanolib_helper.write_number_od(object_dictionary, 31, Nanolib.OdIndex(0x6040, 0x00))
-    print("Final Controls")
-    print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
+    # print("Final Controls")
+    # print(nanolib_helper.read_number_od(object_dictionary, Nanolib.OdIndex(0x6040, 0x00)))
 
 # Connect motor needs nanolib_helper and the device # of the motor (ex. 0, 1, 2)
 def connect_motor(nanolib_helper, motorID):
@@ -98,8 +100,10 @@ def connect_motor(nanolib_helper, motorID):
 
     # Select Device on Bus
     device_id = device_ids[motorID]
+    
 
     device_handle = nanolib_helper.create_device(device_id)
+    print("Device Handle:", device_handle)
 
     # now connect to the device
     nanolib_helper.connect_device(device_handle)

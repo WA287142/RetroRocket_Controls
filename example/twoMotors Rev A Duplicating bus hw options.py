@@ -1,10 +1,9 @@
 # Purpose of this program is to connect to and control two Nanotec motors simultaneously
-# To install numpy and scipy in the right directory, needed to run 'py -3.10 -m pip install scipy'
+
 #import sys
-import socket
+#import socket
 import time
 import numpy as np
-
 import KuskodeV1 as kine
 import motorFunctions as MF
 from nanotec_nanolib import Nanolib
@@ -88,8 +87,63 @@ print("nanolib setup finish")
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
 # the id is 0 for both because after connecting to one device, the device no longer shows and index shifts left
-motor1 = MF.connect_motor(nanolib_helper, 0)
-motor2 = MF.connect_motor(nanolib_helper, 0)
+print("connect to controller 1")
+bus_hardware_ids = nanolib_helper.get_bus_hardware()
+if bus_hardware_ids.empty():
+    raise Exception('No bus hardware found.')
+    
+print('\nAvailable bus hardware:\n')
+
+line_num = 0
+# just for better overview: print out available hardware
+for bus_hardware_id in bus_hardware_ids:
+    print('{}. {} with protocol: {}'.format(line_num, bus_hardware_id.getName(), bus_hardware_id.getProtocol()))
+    line_num += 1
+
+print('\nPlease select (type) bus hardware number and press [ENTER]:', end ='');
+
+line_num = int(input())
+print("connected to motor 1")
+
+print('');
+
+if ((line_num < 0) or (line_num >= bus_hardware_ids.size())):
+    raise Exception('Invalid selection!')
+    
+# Use the selected bus hardware
+bus_hw_id = bus_hardware_ids[line_num]
+
+# create bus hardware options for opening the hardware
+bus_hw_options = nanolib_helper.create_bus_hardware_options(bus_hw_id)
+
+# now able to open the hardware itself
+nanolib_helper.open_bus_hardware(bus_hw_id, bus_hw_options)
+
+# either scan the whole bus for devices (in case the bus supports scanning)
+device_ids = nanolib_helper.scan_bus(bus_hw_id)
+print("device id's: ",device_ids)
+
+print("")
+for device_id in device_ids:
+    print("Found Device: {}".format(device_id.toString()))
+    
+if (device_ids.size() == 0):
+    raise Exception('No devices found.')
+
+print('\nAvailable devices:\n')
+
+line_num = 0
+# just for better overview: print out available hardware
+for id in device_ids:
+    print('{}. {} [device id: {}, hardware: {}]'.format(line_num, id.getDescription(), id.getDeviceId(), id.getBusHardwareId().getName()))
+    line_num += 1
+
+print('\nPlease select (enter) device number(0-{}) and press [ENTER]:'.format(line_num - 1), end ='');
+
+line_num = int(input())
+
+print('');
+#motor2 = MF.connect_motor(nanolib_helper, 0)
 
 
 ###########################################################################
@@ -105,29 +159,26 @@ motor2 = MF.connect_motor(nanolib_helper, 0)
 # Runs through 360 degrees of motion in 1 degree increments
 
 # Move the motor to position 0 before beginning
-MF.move_motor(nanolib_helper, motor1, 0)
-MF.move_motor(nanolib_helper, motor2, 0)
-time.sleep(2)
+#MF.move_motor(nanolib_helper, motor1, 0)
+#MF.move_motor(nanolib_helper, motor2, 0)
+time.sleep(3)
 
 # Inverse Kinematic calculation
 # x, y, z units are in inches
 # angle units are radians
-pos_arr = kine.get_inv_kine(0.0, 0.0, 1.0, 0.122, 0.122, 0.122)
-print("pos_arr = ", pos_arr)
-pos1 = int(np.rad2deg(1))
-pos2 = int(np.rad2deg(pos_arr[1]))
-print("pos1 = ", pos1)
-print("pos2 = ", pos2)
+#pos_arr = kine.get_inv_kine(0, 0, 0, 0, 0, 0)
+#print("pos_arr = ", pos_arr)
+#pos1 = np.rad2deg(pos_arr[0])
+#pos2 = np.rad2deg(pos_arr[1])
 
-MF.move_motor(nanolib_helper, motor1, pos1)
-MF.move_motor(nanolib_helper, motor2, pos2)
+
 
 
 
 # Disconnect the motor
 
-nanolib_helper.disconnect_device(motor1)
-nanolib_helper.disconnect_device(motor2)
+#nanolib_helper.disconnect_device(motor1)
+#nanolib_helper.disconnect_device(motor2)
 
 # bus_hw_id isnt accessible bc it is inside the scope of the connect_motor() function
 # nanolib_helper.close_bus_hardware(bus_hw_id)
