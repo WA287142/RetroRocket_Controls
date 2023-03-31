@@ -24,10 +24,12 @@ from nanolib_sampler_example import SamplerExample
 # Set the max motor speed
 def setMaxSpeed(nanolib_helper, device_handle, maxSpeed):
     print("Setting max motor speed to ", maxSpeed)
-
+    
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
-    nanolib_helper.write_number_od(object_dictionary, maxSpeed, Nanolib.OdIndex(0x6080, 0x00))
 
+    nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, maxSpeed, Nanolib.OdIndex(0x6080, 0x00))
+    
 # Move the motor. value - the position or distance to move to
 #                 relative - if 1, position is relative. otherwise position is absolute
 def move_motor(nanolib_helper, device_handle, value, mode):
@@ -64,12 +66,13 @@ def move_motor(nanolib_helper, device_handle, value, mode):
     # 11111 = 31 -> You want this to run your motor
     # 1111 = 15
     # 111111 = 63
-    # 1011111 = 95
+    # 1011111 = 95 -> This is for running the motor in relative position
     if mode == 'rel':  
         nanolib_helper.write_number_od(object_dictionary, 95, Nanolib.OdIndex(0x6040, 0x00))
     elif mode == 'abs':
         nanolib_helper.write_number_od(object_dictionary, 31, Nanolib.OdIndex(0x6040, 0x00))
     else:
+        # Exits the program if an invalid position mode is selected
         print("invalid position mode. Needs to be 'abs' or 'rel'")
         sys.exit()
     # print("Final Controls")
@@ -79,14 +82,13 @@ def move_motor(nanolib_helper, device_handle, value, mode):
 def connect_motor(nanolib_helper, motorID):
     # list all hardware available, decide for the first one
     bus_hardware_ids = nanolib_helper.get_bus_hardware()
-
     line_num = 0
     for bus_hardware_id in bus_hardware_ids:
             print('{}. {} with protocol: {}'.format(line_num, bus_hardware_id.getName(), bus_hardware_id.getProtocol()))
             line_num += 1
         
     # Use the selected bus hardware
-    # 5 is the USB connection
+    # 6 is the USB connection. May change as more motors are connected
     bus_hw_id = bus_hardware_ids[6]
 
     # create bus hardware options for opening the hardware
@@ -131,5 +133,5 @@ def connect_motor(nanolib_helper, motorID):
 
     # print("Motor ", motorID, " Object Dictionary: ", object_dictionary)
 
-
+    # device_handle is used to call the connection to the motor
     return device_handle
