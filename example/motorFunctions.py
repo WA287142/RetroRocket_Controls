@@ -89,7 +89,7 @@ def connect_motor(nanolib_helper, motorID):
         
     # Use the selected bus hardware
     # 6 is the USB connection. May change as more motors are connected
-    bus_hw_id = bus_hardware_ids[6]
+    bus_hw_id = bus_hardware_ids[10]
 
     # create bus hardware options for opening the hardware
     bus_hw_options = nanolib_helper.create_bus_hardware_options(bus_hw_id)
