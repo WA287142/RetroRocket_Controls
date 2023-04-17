@@ -29,7 +29,17 @@ def setMaxSpeed(nanolib_helper, device_handle, maxSpeed):
 
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
     nanolib_helper.write_number_od(object_dictionary, maxSpeed, Nanolib.OdIndex(0x6080, 0x00))
+
+# Set the motor acceleration
+def setAcceleration(nanolib_helper, device_handle, acceleration):
+    print("Setting acceleration to ", acceleration)
     
+    object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
+    
+    nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, acceleration, Nanolib.OdIndex(0x60C5, 0x00))
+
+
 # Move the motor. value - the position or distance to move to
 #                 relative - if 1, position is relative. otherwise position is absolute
 def move_motor(nanolib_helper, device_handle, value, mode):
@@ -89,8 +99,8 @@ def connect_motor(nanolib_helper, motorID):
         
     # Use the selected bus hardware
     # 6 is the USB connection. May change as more motors are connected
-    ############ NEED TO CHECK WITH THE NUMEBR OF INPUTS ###############
-    bus_hw_id = bus_hardware_ids[10]
+    ############ NEED TO CHECK WITH THE NUMBER OF INPUTS ###############
+    bus_hw_id = bus_hardware_ids[-1]
 
     # create bus hardware options for opening the hardware
     bus_hw_options = nanolib_helper.create_bus_hardware_options(bus_hw_id)
