@@ -88,8 +88,8 @@ print("nanolib setup finish")
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
 # the id is 0 for both because after connecting to one device, the device no longer shows and index shifts left
-motor1 = MF.connect_motor(nanolib_helper, 0)
-motor2 = MF.connect_motor(nanolib_helper, 0)
+motor1 = MF.connect_motor(nanolib_helper, 4)
+motor2 = MF.connect_motor(nanolib_helper, 4)
 
 
 ###########################################################################
@@ -105,25 +105,33 @@ motor2 = MF.connect_motor(nanolib_helper, 0)
 # Runs through 360 degrees of motion in 1 degree increments
 
 # Move the motor to position 0 before beginning
-MF.move_motor(nanolib_helper, motor1, 0)
-MF.move_motor(nanolib_helper, motor2, 0)
+MF.move_motor(nanolib_helper, motor1, 0, 'abs')
+MF.move_motor(nanolib_helper, motor2, 0, 'abs')
 time.sleep(2)
 
 # Inverse Kinematic calculation
 # x, y, z units are in inches
 # angle units are radians
-pos_arr = kine.get_inv_kine(0.0, 0.0, 1.0, 0.122, 0.122, 0.122)
-print("pos_arr = ", pos_arr)
-pos1 = int(np.rad2deg(1))
-pos2 = int(np.rad2deg(pos_arr[1]))
-print("pos1 = ", pos1)
-print("pos2 = ", pos2)
+# pos_arr = kine.get_inv_kine(0.0, 0.0, 1.0, 0.122, 0.122, 0.122)
+# print("pos_arr = ", pos_arr)
+# pos1 = int(np.rad2deg(1))
+# pos2 = int(np.rad2deg(pos_arr[1]))
+# print("pos1 = ", pos1)
+# print("pos2 = ", pos2)
 
-MF.move_motor(nanolib_helper, motor1, pos1)
-MF.move_motor(nanolib_helper, motor2, pos2)
+# MF.move_motor(nanolib_helper, motor1, pos1)
+# MF.move_motor(nanolib_helper, motor2, pos2)
 
+MF.setMaxSpeed(nanolib_helper, motor1, 150)
+MF.setMaxSpeed(nanolib_helper, motor2, 150)
+MF.setAcceleration(nanolib_helper, motor1, 1000)
+MF.setAcceleration(nanolib_helper, motor2, 1000)
 
-
+angle = int(input("Enter angle: "))
+while (angle != -1):
+    MF.move_motor(nanolib_helper, motor1, angle, 'rel')
+    MF.move_motor(nanolib_helper, motor2, angle, 'rel')
+    angle = int(input("Enter angle: "))
 # Disconnect the motor
 
 nanolib_helper.disconnect_device(motor1)

@@ -44,6 +44,7 @@ MF.setMaxSpeed(nanolib_helper, motor5, 200)
 MF.setMaxSpeed(nanolib_helper, motor6, 200)
 
 # Move the motor to position 0 before beginning
+# May remove for actual demonstration
 
 MF.move_motor(nanolib_helper, motor1, 0, 'abs')
 MF.move_motor(nanolib_helper, motor2, 0, 'abs')
@@ -52,7 +53,7 @@ MF.move_motor(nanolib_helper, motor4, 0, 'abs')
 MF.move_motor(nanolib_helper, motor5, 0, 'abs')
 MF.move_motor(nanolib_helper, motor6, 0, 'abs')
 
-time.sleep(2) # give time for motor to move to starting position
+time.sleep(2) 
 
 
 # Create the server to connect to. Need to move the main code into the nested while loop when ready
