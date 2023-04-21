@@ -88,8 +88,8 @@ print("nanolib setup finish")
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
 # the id is 0 for both because after connecting to one device, the device no longer shows and index shifts left
-motor1 = MF.connect_motor(nanolib_helper, 4)
-motor2 = MF.connect_motor(nanolib_helper, 4)
+motor1 = MF.connect_motor(nanolib_helper, 0)
+motor2 = MF.connect_motor(nanolib_helper, 0)
 
 
 ###########################################################################
@@ -122,8 +122,8 @@ time.sleep(2)
 # MF.move_motor(nanolib_helper, motor1, pos1)
 # MF.move_motor(nanolib_helper, motor2, pos2)
 
-MF.setMaxSpeed(nanolib_helper, motor1, 150)
-MF.setMaxSpeed(nanolib_helper, motor2, 150)
+MF.setMaxSpeed(nanolib_helper, motor1, 200)
+MF.setMaxSpeed(nanolib_helper, motor2, 200)
 MF.setAcceleration(nanolib_helper, motor1, 1000)
 MF.setAcceleration(nanolib_helper, motor2, 1000)
 

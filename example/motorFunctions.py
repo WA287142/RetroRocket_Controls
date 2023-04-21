@@ -146,3 +146,5 @@ def connect_motor(nanolib_helper, motorID):
 
     # device_handle is used to call the connection to the motor
     return device_handle
+
+# def resetPosition():

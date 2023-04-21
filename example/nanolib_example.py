@@ -212,6 +212,13 @@ if __name__ == '__main__':
 
     # Allows User to input desired angle for both motors until -1 is entered
 
+    print("Setting acceleration to ", 50)
+    
+    object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
+    
+    nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, 50, Nanolib.OdIndex(0x60C5, 0x00))
+
     val = int(input("Enter angle: "))
 
     while(val != -1):
