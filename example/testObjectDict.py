@@ -29,7 +29,7 @@ MF.setMaxSpeed(nanolib_helper, motor1, 500)
 MF.setAcceleration(nanolib_helper, motor1, 1000)
 object_dictionary = nanolib_helper.get_device_object_dictionary(motor1)
 
-# Reset motot so you can change settings
+# Reset motor so you can change settings
 # nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
 
 # changing setting

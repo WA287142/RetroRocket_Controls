@@ -1,4 +1,5 @@
 # Purpose of this program is to test the functionality of threading in  Python for multiple motors
+# THIS PROGRAM IS NOT IMPORTANT #
 import sys
 import socket
 import time

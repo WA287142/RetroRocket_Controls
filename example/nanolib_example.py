@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+# Use this program to connect to a single motor and test it #
 import sys
 sys.path.insert(8, r'C:\Users\Public\Downloads\NanoLib_1.0.1\NanoLib_Python_Windows\nanotec_nanolib_win-1.0.1\nanotec_nanolib')
 
