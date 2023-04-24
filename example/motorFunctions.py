@@ -38,6 +38,8 @@ def setAcceleration(nanolib_helper, device_handle, acceleration):
     
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
     nanolib_helper.write_number_od(object_dictionary, acceleration, Nanolib.OdIndex(0x60C5, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, acceleration, Nanolib.OdIndex(0x6083, 0x00))
+    
 
 
 # Move the motor. value - the position or distance to move to
@@ -144,6 +146,9 @@ def connect_motor(nanolib_helper, motorID):
 
     # print("Motor ", motorID, " Object Dictionary: ", object_dictionary)
 
+    # Setting the Mode of Operation to Profile Position Mode
+    nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
+    
     # device_handle is used to call the connection to the motor
     return device_handle
 

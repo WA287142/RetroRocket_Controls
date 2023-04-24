@@ -62,7 +62,7 @@ def move_motor(nanolib_helper, device_handle, value):
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
     
     # Setting the Mode of Operation to Profile Position Mode
-    # nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
+    nanolib_helper.write_number_od(object_dictionary, 1, Nanolib.OdIndex(0x6060, 0x00))
 
     # Make sure motor starts out as off by resetting motor controls
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
