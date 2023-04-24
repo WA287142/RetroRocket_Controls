@@ -22,10 +22,11 @@ def get_inv_kine(x_disp, y_disp, z_disp, ψ, θ, φ, get_out_of_plane=False, deg
     z_disp = float(z_disp)
 
     if deg_input:
-        ψ = np.deg2rad(float(ψ))
-        θ = np.deg2rad(float(θ))
-        φ = np.deg2rad(float(φ))
+        ψ = np.deg2rad(float(ψ)/2)
+        θ = np.deg2rad(float(θ)/2)
+        φ = np.deg2rad(float(φ)/2)
     
+    print("angles in kine:", ψ, θ, φ)
     # DCM defining the rotation between the platform frame and base frame
     rot_representation = scitrans.Rotation.from_euler('zxy', [-ψ, θ, φ], degrees=False)
     DCM = rot_representation.as_matrix()

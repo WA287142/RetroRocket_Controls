@@ -29,29 +29,29 @@ nanolib_helper.setup()
 # the id is equivalent to the index that the device will show up as in example.py
 # the id is 0 for both because after connecting to one device, the device no longer shows and index shifts left
 motor1 = MF.connect_motor(nanolib_helper, 0)
-motor2 = MF.connect_motor(nanolib_helper, 0)
-motor3 = MF.connect_motor(nanolib_helper, 0)
-motor4 = MF.connect_motor(nanolib_helper, 0)
-motor5 = MF.connect_motor(nanolib_helper, 0)
-motor6 = MF.connect_motor(nanolib_helper, 0)
+# motor2 = MF.connect_motor(nanolib_helper, 0)
+# motor3 = MF.connect_motor(nanolib_helper, 0)
+# motor4 = MF.connect_motor(nanolib_helper, 0)
+# motor5 = MF.connect_motor(nanolib_helper, 0)
+# motor6 = MF.connect_motor(nanolib_helper, 0)
 
 # Set the max motor speed
-MF.setMaxSpeed(nanolib_helper, motor1, 200)
-MF.setMaxSpeed(nanolib_helper, motor2, 200)
-MF.setMaxSpeed(nanolib_helper, motor3, 200)
-MF.setMaxSpeed(nanolib_helper, motor4, 200)
-MF.setMaxSpeed(nanolib_helper, motor5, 200)
-MF.setMaxSpeed(nanolib_helper, motor6, 200)
+MF.setMaxSpeed(nanolib_helper, motor1, 500)
+# MF.setMaxSpeed(nanolib_helper, motor2, 200)
+# MF.setMaxSpeed(nanolib_helper, motor3, 200)
+# MF.setMaxSpeed(nanolib_helper, motor4, 200)
+# MF.setMaxSpeed(nanolib_helper, motor5, 200)
+# MF.setMaxSpeed(nanolib_helper, motor6, 200)
 
 # Move the motor to position 0 before beginning
 # May remove for actual demonstration
 
 MF.move_motor(nanolib_helper, motor1, 0, 'abs')
-MF.move_motor(nanolib_helper, motor2, 0, 'abs')
-MF.move_motor(nanolib_helper, motor3, 0, 'abs')
-MF.move_motor(nanolib_helper, motor4, 0, 'abs')
-MF.move_motor(nanolib_helper, motor5, 0, 'abs')
-MF.move_motor(nanolib_helper, motor6, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor2, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor3, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor4, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor5, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor6, 0, 'abs')
 
 time.sleep(2) 
 
@@ -85,35 +85,47 @@ while True:
     from_client = ''
     
     while True:
+        # time.sleep(.2)
         data = conn.recv(4096)
         if not data:
             # disconnect the motor
             nanolib_helper.disconnect_device(motor1)
-            nanolib_helper.disconnect_device(motor2)
-            nanolib_helper.disconnect_device(motor3)
-            nanolib_helper.disconnect_device(motor4)
-            nanolib_helper.disconnect_device(motor5)
-            nanolib_helper.disconnect_device(motor6)
+            # nanolib_helper.disconnect_device(motor2)
+            # nanolib_helper.disconnect_device(motor3)
+            # nanolib_helper.disconnect_device(motor4)
+            # nanolib_helper.disconnect_device(motor5)
+            # nanolib_helper.disconnect_device(motor6)
 
             # close the server connection
             conn.close()
             print("\nClosed everything successfully\n")
             sys.exit()
-        # data = data.decode()
-        # print("Client says: "+ data)
+        data = data.decode()
+        print("Client says: "+ data)
         # Take in data and convert to floats and send to Kuskode
-        data = pickle.loads(data)
+        # data = pickle.loads(data)
+        # print("DATA = ", data)
+        data = data.split('=')
         print("DATA = ", data)
-        data = data.split(',')
-        # Input Kuskode here
-        angles = kine.get_inv_kine(data[1], data[2], data[3], data[4], data[5], data[6], False, True, True)
+        pitchData = data[1]
+        pitch = pitchData[:-2]
 
-        MF.move_motor(nanolib_helper, motor1, int(angles[0]), 'rel')
-        MF.move_motor(nanolib_helper, motor2, int(angles[1]), 'rel')
-        MF.move_motor(nanolib_helper, motor3, int(angles[2]), 'rel')
-        MF.move_motor(nanolib_helper, motor4, int(angles[3]), 'rel')
-        MF.move_motor(nanolib_helper, motor5, int(angles[4]), 'rel')
-        MF.move_motor(nanolib_helper, motor6, int(angles[5]), 'rel')
+        yawData = data[2]
+        yaw = yawData[:-2]
+        roll = data[3]
+        print('yaw', yaw)
+        print('pitch', pitch)
+        print('roll', roll)
+
+        # Input Kuskode here
+        angles = kine.get_inv_kine(0, 0, 25.5, 0, pitch, roll, False, True, True)
+        print('angles = ', angles)
+        MF.move_motor(nanolib_helper, motor1, int(angles[0])* 10, 'abs')
+        # MF.move_motor(nanolib_helper, motor2, int(angles[1]), 'rel')
+        # MF.move_motor(nanolib_helper, motor3, int(angles[2]), 'rel')
+        # MF.move_motor(nanolib_helper, motor4, int(angles[3]), 'rel')
+        # MF.move_motor(nanolib_helper, motor5, int(angles[4]), 'rel')
+        # MF.move_motor(nanolib_helper, motor6, int(angles[5]), 'rel')
         conn.sendall('Server received message'.encode())
 
 
