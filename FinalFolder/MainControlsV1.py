@@ -113,34 +113,44 @@ while True:
         # Take in data and convert to floats and send to Kuskode
         # data = pickle.loads(data)
         # print("DATA = ", data)
+        # Data is taken in as a string but contains P=1234.0 Y=1234.0 R=1234.0 . Need to Remove the Letters and ='s
+        # Split('=') should result in P, 1234.0 Y, 1234.0 R, 1234.0
         data = data.split('=')
         print("DATA = ", data)
+        # Taking the 2nd index, [1], we store everything but the last two indices into variable pitch
         pitchData = data[1]
         pitch = pitchData[:-2]
-
+        # for yaw, we take the 3rd index [2] and store everything but the last 2 indicies of the index into variable yaw
         yawData = data[2]
         yaw = yawData[:-2]
+        # roll is only numbers so we can store it directly into vairable roll
         roll = data[3]
-        print('yaw', yaw)
-        print('pitch', pitch)
-        print('roll', roll)
+        # These are for debugging
+        # print('yaw', yaw)
+        # print('pitch', pitch)
+        # print('roll', roll)
 
         # Input Kuskode here
+        # First 3 parameters are x,y,z translation. Not needed currently so set to 0. z is set to 25.5 since the platform is set 25.5 in off the ground
+        # 4th parameter is yaw. We don't consider yaw so set it to 0 for now.
         angles = kine.get_inv_kine(0, 0, 25.5, 0, pitch, roll, False, True, True)
         print('angles = ', angles)
-        MF.move_motor(nanolib_helper, motor1, int(angles[0])* 10, 'abs')
-        # MF.move_motor(nanolib_helper, motor2, int(angles[1]), 'rel')
-        # MF.move_motor(nanolib_helper, motor3, int(angles[2]), 'rel')
-        # MF.move_motor(nanolib_helper, motor4, int(angles[3]), 'rel')
-        # MF.move_motor(nanolib_helper, motor5, int(angles[4]), 'rel')
-        # MF.move_motor(nanolib_helper, motor6, int(angles[5]), 'rel')
+        gear_ratio = 10
+        MF.move_motor(nanolib_helper, motor1, int(angles[0])* gear_ratio, 'abs')
+        # MF.move_motor(nanolib_helper, motor2, int(angles[1])*gear_ratio, 'abs')
+        # MF.move_motor(nanolib_helper, motor3, int(angles[2])*gear_ratio, 'abs')
+        # MF.move_motor(nanolib_helper, motor4, int(angles[3])*gear_ratio, 'abs')
+        # MF.move_motor(nanolib_helper, motor5, int(angles[4])*gear_ratio, 'abs')
+        # MF.move_motor(nanolib_helper, motor6, int(angles[5])*gear_ratio, 'abs')
+        
+        # By sending this message, we tell the VR side that the data has been processed and motors have been moved and can now take in a new data point.
         conn.sendall('Server received message'.encode())
 
 
-#     conn.close()
-#     print('client disconnected')
+    # conn.close()
+    # print('client disconnected')
 
-#     break
+    # break
 
 # # Disconnect the motor
 # nanolib_helper.disconnect_device(motor1)
