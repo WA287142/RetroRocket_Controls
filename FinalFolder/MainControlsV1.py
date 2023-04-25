@@ -1,4 +1,4 @@
-# In V1 of sixMotors.py, a server is hosted to take in data from the VR sim
+# In V1 of MainControls.py, a server is hosted to take in data from the VR sim
 # Purpose of this program is to connect to and control six Nanotec motors simultaneously
 # To install numpy and scipy in the right directory, needed to run 'py -3.10 -m pip install scipy'
 
@@ -42,6 +42,14 @@ MF.setMaxSpeed(nanolib_helper, motor1, 500)
 # MF.setMaxSpeed(nanolib_helper, motor4, 200)
 # MF.setMaxSpeed(nanolib_helper, motor5, 200)
 # MF.setMaxSpeed(nanolib_helper, motor6, 200)
+
+# Set acceleration
+# MF.setAcceleration(nanolib_helper, motor1, 1000)
+# MF.setAcceleration(nanolib_helper, motor2, 1000)
+# MF.setAcceleration(nanolib_helper, motor3, 1000)
+# MF.setAcceleration(nanolib_helper, motor4, 1000)
+# MF.setAcceleration(nanolib_helper, motor5, 1000)
+# MF.setAcceleration(nanolib_helper, motor6, 1000)
 
 # Move the motor to position 0 before beginning
 # May remove for actual demonstration
