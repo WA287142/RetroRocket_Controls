@@ -136,7 +136,7 @@ while True:
         angles = kine.get_inv_kine(0, 0, 25.5, 0, pitch, roll, False, True, True)
         print('angles = ', angles)
         gear_ratio = 10
-        MF.move_motor(nanolib_helper, motor1, int(angles[0])* gear_ratio, 'abs')
+        MF.move_motor(nanolib_helper, motor1, int(angles[0])*gear_ratio, 'abs')
         MF.move_motor(nanolib_helper, motor2, int(angles[1])*gear_ratio, 'abs')
         MF.move_motor(nanolib_helper, motor3, int(angles[2])*gear_ratio, 'abs')
         MF.move_motor(nanolib_helper, motor4, int(angles[3])*gear_ratio, 'abs')
