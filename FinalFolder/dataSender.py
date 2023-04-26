@@ -4,7 +4,7 @@ import pickle
 import socket
 import time
 
-f = open("sweep.txt", "r")
+f = open("three_sweep.txt", "r")
 
 # Create a TCP socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

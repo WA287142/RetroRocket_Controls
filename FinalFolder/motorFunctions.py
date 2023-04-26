@@ -124,16 +124,23 @@ def connect_motor(nanolib_helper, motorID):
 
     line_num = 0
     # just for better overview: print out available hardware
-    for id in device_ids:
-        print('{}. {} [device id: {}, hardware: {}]'.format(line_num, id.getDescription(), id.getDeviceId(), id.getBusHardwareId().getName()))
-        line_num += 1
 
+    motorList = []
+    
+    for id in device_ids:
+        # print('{}. {} [device id: {}, hardware: {}]'.format(line_num, id.getDescription(), id.getDeviceId(), id.getBusHardwareId().getName()))
+        motorList.append(id.getDeviceId())
+        line_num += 1
+    print("MotorList: ", motorList)
     # Select Device on Bus
-    device_id = device_ids[motorID]
+    for i in range(len(motorList)):
+        if(motorList[i] == motorID):
+
+            device_id = device_ids[i]
     
 
     device_handle = nanolib_helper.create_device(device_id)
-    print("Device Handle:", device_handle)
+    # print("Device Handle:", device_handle)
 
     # now connect to the device
     nanolib_helper.connect_device(device_handle)
