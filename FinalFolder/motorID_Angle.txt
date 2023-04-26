@@ -3,17 +3,17 @@
 Motor # and their respective id
 ---------------------------------------------------------------------
 Motor #         Device id
-1               
-2               
-3               
-4               
-5               
-6               
+1               262149
+2               131078
+3               196614
+4               262150
+5               131077
+6               196613
 ---------------------------------------------------------------------
 
 
 The current order of connection should be 2, 3, 4, 5, 6, 1
-234561
+2
 In the code for connecting to motors,might be easier to assign the motor variables like
 
 motor2 = MF.connect_motor(nanolib_helper, 0)

@@ -112,12 +112,14 @@ def connect_motor(nanolib_helper, motorID):
 
     # either scan the whole bus for devices (in case the bus supports scanning)
     device_ids = nanolib_helper.scan_bus(bus_hw_id)
+    
+
 
     print("")
     for device_id in device_ids:
         print("Found Device: {}".format(device_id.toString()))
         
-    if (device_ids.size() == 0):
+    if (device_ids.size() == 0):    
         raise Exception('No devices found.')
 
     print('\nAvailable devices:\n')
@@ -140,6 +142,7 @@ def connect_motor(nanolib_helper, motorID):
     
 
     device_handle = nanolib_helper.create_device(device_id)
+   
     # print("Device Handle:", device_handle)
 
     # now connect to the device

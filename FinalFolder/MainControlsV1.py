@@ -53,6 +53,14 @@ MF.setAcceleration(nanolib_helper, motor6, 1000)
 
 # Move the motor to position 0 before beginning
 # May remove for actual demonstration
+MF.move_motor(nanolib_helper, motor1, 0, 'abs')
+MF.move_motor(nanolib_helper, motor2, 0, 'abs')
+MF.move_motor(nanolib_helper, motor3, 0, 'abs')
+MF.move_motor(nanolib_helper, motor4, 0, 'abs')
+MF.move_motor(nanolib_helper, motor5, 0, 'abs')
+MF.move_motor(nanolib_helper, motor6, 0, 'abs')
+
+time.sleep(3)
 
 MF.move_motor(nanolib_helper, motor1, -1583, 'abs')
 MF.move_motor(nanolib_helper, motor2, 960, 'abs')
