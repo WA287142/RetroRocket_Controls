@@ -94,20 +94,22 @@ while True:
     
     while True:
         # time.sleep(.2)
+        # By sending this message, we tell the VR side that the data has been processed and motors have been moved and can now take in a new data point.
+        conn.sendall('Server received message'.encode())
         data = conn.recv(4096)
-        if not data:
-            # disconnect the motor
-            nanolib_helper.disconnect_device(motor1)
-            nanolib_helper.disconnect_device(motor2)
-            nanolib_helper.disconnect_device(motor3)
-            nanolib_helper.disconnect_device(motor4)
-            nanolib_helper.disconnect_device(motor5)
-            nanolib_helper.disconnect_device(motor6)
+        # if not data:
+        #     # disconnect the motor
+        #     nanolib_helper.disconnect_device(motor1)
+        #     nanolib_helper.disconnect_device(motor2)
+        #     nanolib_helper.disconnect_device(motor3)
+        #     nanolib_helper.disconnect_device(motor4)
+        #     nanolib_helper.disconnect_device(motor5)
+        #     nanolib_helper.disconnect_device(motor6)
 
-            # close the server connection
-            conn.close()
-            print("\nClosed everything successfully\n")
-            sys.exit()
+        #     # close the server connection
+        #     conn.close()
+        #     print("\nClosed everything successfully\n")
+        #     sys.exit()
         data = data.decode()
         print("Client says: "+ data)
         # Take in data and convert to floats and send to Kuskode
@@ -143,8 +145,6 @@ while True:
         MF.move_motor(nanolib_helper, motor5, -790 + int(angles[4])*gear_ratio, 'abs')
         MF.move_motor(nanolib_helper, motor6, -630 + int(angles[5])*gear_ratio, 'abs')
         
-        # By sending this message, we tell the VR side that the data has been processed and motors have been moved and can now take in a new data point.
-        conn.sendall('Server received message'.encode())
 
 
     # conn.close()
