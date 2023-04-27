@@ -28,12 +28,12 @@ nanolib_helper.setup()
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
 # the id is 0 for both because after connecting to one device, the device no longer shows and index shifts left
-motor3 = MF.connect_motor(nanolib_helper, 0)
 motor4 = MF.connect_motor(nanolib_helper, 0)
-motor1 = MF.connect_motor(nanolib_helper, 0)
-motor5 = MF.connect_motor(nanolib_helper, 0)
-motor6 = MF.connect_motor(nanolib_helper, 0)
+motor3 = MF.connect_motor(nanolib_helper, 0)
 motor2 = MF.connect_motor(nanolib_helper, 0)
+motor6 = MF.connect_motor(nanolib_helper, 0)
+motor5 = MF.connect_motor(nanolib_helper, 0)
+motor1 = MF.connect_motor(nanolib_helper, 0)
 
 # Set the max motor speed
 MF.setMaxSpeed(nanolib_helper, motor1, 500)
@@ -53,6 +53,15 @@ MF.setAcceleration(nanolib_helper, motor6, 1000)
 
 # Move the motor to position 0 before beginning
 # May remove for actual demonstration
+# MF.move_motor(nanolib_helper, motor1, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor2, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor3, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor4, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor5, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor6, 0, 'abs')
+
+# time.sleep(3)
+
 MF.move_motor(nanolib_helper, motor1, 0, 'abs')
 MF.move_motor(nanolib_helper, motor2, 0, 'abs')
 MF.move_motor(nanolib_helper, motor3, 0, 'abs')
@@ -60,14 +69,6 @@ MF.move_motor(nanolib_helper, motor4, 0, 'abs')
 MF.move_motor(nanolib_helper, motor5, 0, 'abs')
 MF.move_motor(nanolib_helper, motor6, 0, 'abs')
 
-time.sleep(3)
-
-MF.move_motor(nanolib_helper, motor1, -1583, 'abs')
-MF.move_motor(nanolib_helper, motor2, 960, 'abs')
-MF.move_motor(nanolib_helper, motor3, 2090, 'abs')
-MF.move_motor(nanolib_helper, motor4, -210, 'abs')
-MF.move_motor(nanolib_helper, motor5, -790, 'abs')
-MF.move_motor(nanolib_helper, motor6, -630, 'abs')
 
 time.sleep(2) 
 
@@ -99,7 +100,8 @@ while True:
     # conn.sendall("Data received to Server".encode())
 
     from_client = ''
-    
+    f = open("flightTestOutput.txt", 'w')
+
     while True:
         # time.sleep(1)
         # By sending this message, we tell the VR side that the data has been processed and motors have been moved and can now take in a new data point.
@@ -119,7 +121,7 @@ while True:
         #     print("\nClosed everything successfully\n")
         #     sys.exit()
         data = data.decode()
-        print("Client says: "+ data)
+        # print("Client says: "+ data)
         # Take in data and convert to floats and send to Kuskode
         # data = pickle.loads(data)
         # print("DATA = ", data)
@@ -128,20 +130,19 @@ while True:
         data = data.split('P')
         lastpt = data[-1]
         lastpt = lastpt.split('=')
-        print("lastpt:", lastpt)
+        # print("lastpt:", lastpt)
         
 
 
-        print("DATA = ", data)
+        # print("DATA = ", data)
         # Taking the 2nd index, [1], we store everything but the last two indices into variable pitch
         pitchData = lastpt[1]
         yawData = lastpt[2]
-        roll = lastpt[3]
-
-        pitch = pitchData[:-2]
+        roll = float(lastpt[3])/6
+        pitch = float(pitchData[:-2])/3
         # for yaw, we take the 3rd index [2] and store everything but the last 2 indicies of the index into variable yaw
         
-        yaw = yawData[:-2]
+        yaw = float(yawData[:-2])/6
         # roll is only numbers so we can store it directly into vairable roll
         
         # These are for debugging
@@ -155,13 +156,15 @@ while True:
         angles = kine.get_inv_kine(0, 0, 25.5, 0, pitch, roll, False, True, True)
         print('angles = ', angles)
         gear_ratio = 10
+        f.write(str(angles) + "\n")
         if(angles[0] != -99999):
-            MF.move_motor(nanolib_helper, motor1, -1583 + int(angles[0])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor2, 960 + int(angles[1])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor3, 2090 + int(angles[2])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor4, -210 + int(angles[3])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor5, -790 + int(angles[4])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor6, -630 + int(angles[5])*gear_ratio, 'abs')
+            
+            MF.move_motor(nanolib_helper, motor1, int(angles[0])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor2, int(angles[1])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor3, int(angles[2])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor4, int(angles[3])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor5, int(angles[4])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor6, int(angles[5])*gear_ratio, 'abs')
         
 
 

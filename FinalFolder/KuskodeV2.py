@@ -119,8 +119,8 @@ def get_inv_kine(x_disp, y_disp, z_disp, ψ, θ, φ, get_out_of_plane=False, deg
         # And the lever arm angle, α
         α_array[i] = np.arcsin( g_array[i] / np.sqrt( e_array[i] ** 2 + f_array[i] ** 2 ) ) - np.arctan2( f_array[i], e_array[i] )
         
-        # Return None if there are NaN values detected or any motor angles exceed 45° (pi/4)
-        if np.isnan(α_array[i]) or abs(α_array[i]) > np.pi/4:
+        # Return None if there are NaN values detected or any motor angles exceed 45° (pi/4). 30° (pi/6)
+        if np.isnan(α_array[i]) or abs(α_array[i]) > np.pi/6:
             return [-99999]
 
         # Flip the sign of α if it corresponds to one of the "left-handed" actuators

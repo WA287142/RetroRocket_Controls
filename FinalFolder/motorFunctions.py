@@ -45,7 +45,7 @@ def setAcceleration(nanolib_helper, device_handle, acceleration):
 # Move the motor. value - the position or distance to move to
 #                 relative - if 1, position is relative. otherwise position is absolute
 def move_motor(nanolib_helper, device_handle, value, mode):
-    print("Moving Motor to angle: ", value)
+    # print("Moving Motor to angle: ", value)
     home_page_od = Nanolib.OdIndex(0x6505, 0x00);
     control_word_od = Nanolib.OdIndex(0x6040, 0x00);
 

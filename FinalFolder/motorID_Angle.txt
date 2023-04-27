@@ -11,22 +11,28 @@ Motor #         Device id
 6               196613
 ---------------------------------------------------------------------
 
-
+For old computer
 The current order of connection should be 2, 3, 4, 5, 6, 1
 2
+New order for new orientation for Old computer: 1, 4, 3, 6, 5, 2
+
+
+For new computer: 3, 4, 1, 5, 6, 2
+For new computer and new orientation: 4, 3, 2, 6, 5, 1
 In the code for connecting to motors,might be easier to assign the motor variables like
 
-motor2 = MF.connect_motor(nanolib_helper, 0)
-motor3 = MF.connect_motor(nanolib_helper, 0)
 motor4 = MF.connect_motor(nanolib_helper, 0)
-motor5 = MF.connect_motor(nanolib_helper, 0)
+motor3 = MF.connect_motor(nanolib_helper, 0)
+motor2 = MF.connect_motor(nanolib_helper, 0)
 motor6 = MF.connect_motor(nanolib_helper, 0)
+motor5 = MF.connect_motor(nanolib_helper, 0)
 motor1 = MF.connect_motor(nanolib_helper, 0)
 
 That way we don't have to worry about the order after connecting
 
 Next Step: Hardcode the angle difference from vertical position
 
+This is Old orientation:
 Motor #         Offset Angle to get to 0
 1                           -1583
 2                           960
@@ -34,3 +40,15 @@ Motor #         Offset Angle to get to 0
 4                           -210
 5                           -790
 6                           -630
+
+
+
+With New Orientation:
+
+Motor #         Offset Angle to get to 0
+1                           -840
+2                           217
+3                           1590
+4                           290
+5                           1170
+6                           1010

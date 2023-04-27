@@ -23,12 +23,12 @@ nanolib_helper.setup()
 # Use Connect_motor() to connect to both motors
 # the id is equivalent to the index that the device will show up as in example.py
 # the id is 0 for both because after connecting to one device, the device no longer shows and index shifts left
-motor1 = MF.connect_motor(nanolib_helper, 0)
-motor2 = MF.connect_motor(nanolib_helper, 0)
-motor3 = MF.connect_motor(nanolib_helper, 0)
 motor4 = MF.connect_motor(nanolib_helper, 0)
-motor5 = MF.connect_motor(nanolib_helper, 0)
+motor3 = MF.connect_motor(nanolib_helper, 0)
+motor2 = MF.connect_motor(nanolib_helper, 0)
 motor6 = MF.connect_motor(nanolib_helper, 0)
+motor5 = MF.connect_motor(nanolib_helper, 0)
+motor1 = MF.connect_motor(nanolib_helper, 0)
 
 
 MF.setMaxSpeed(nanolib_helper, motor1, 500)
@@ -52,21 +52,21 @@ MF.setAcceleration(nanolib_helper, motor6, 1000)
 
 # changing setting
 # nanolib_helper.write_number_od(object_dictionary, 0x23, Nanolib.OdIndex(0x6098, 0x00))
-MF.move_motor(nanolib_helper, motor1, 0, 'abs')
-MF.move_motor(nanolib_helper, motor2, 0, 'abs')
-MF.move_motor(nanolib_helper, motor3, 0, 'abs')
-MF.move_motor(nanolib_helper, motor4, 0, 'abs')
-MF.move_motor(nanolib_helper, motor5, 0, 'abs')
-MF.move_motor(nanolib_helper, motor6, 0, 'abs')
+# MF.move_motor(nanolib_helper, motor1, -300, 'abs')
+# MF.move_motor(nanolib_helper, motor2, -300, 'abs')
+# MF.move_motor(nanolib_helper, motor3, -300, 'abs')
+# MF.move_motor(nanolib_helper, motor4, -300, 'abs')
+# MF.move_motor(nanolib_helper, motor5, -300, 'abs')
+# MF.move_motor(nanolib_helper, motor6, -300, 'abs')
 
-time.sleep(5)
+# time.sleep(3)
 
-MF.move_motor(nanolib_helper, motor1, -1583, 'abs')
-MF.move_motor(nanolib_helper, motor2, 960, 'abs')
-MF.move_motor(nanolib_helper, motor3, 2090, 'abs')
-MF.move_motor(nanolib_helper, motor4, -210, 'abs')
-MF.move_motor(nanolib_helper, motor5, -790, 'abs')
-MF.move_motor(nanolib_helper, motor6, -630, 'abs')
+# MF.move_motor(nanolib_helper, motor1, -1583, 'abs')
+# MF.move_motor(nanolib_helper, motor2, 960, 'abs')
+# MF.move_motor(nanolib_helper, motor3, 2090, 'abs')
+# MF.move_motor(nanolib_helper, motor4, -210, 'abs')
+# MF.move_motor(nanolib_helper, motor5, -790, 'abs')
+# MF.move_motor(nanolib_helper, motor6, -630, 'abs')
 
 print("Testing Motor 1")
 
