@@ -53,21 +53,22 @@ MF.setAcceleration(nanolib_helper, motor6, 1000)
 
 # Move the motor to position 0 before beginning
 # May remove for actual demonstration
-# MF.move_motor(nanolib_helper, motor1, 0, 'abs')
-# MF.move_motor(nanolib_helper, motor2, 0, 'abs')
-# MF.move_motor(nanolib_helper, motor3, 0, 'abs')
-# MF.move_motor(nanolib_helper, motor4, 0, 'abs')
-# MF.move_motor(nanolib_helper, motor5, 0, 'abs')
-# MF.move_motor(nanolib_helper, motor6, 0, 'abs')
+MF.move_motor(nanolib_helper, motor1, 50, 'abs')
+MF.move_motor(nanolib_helper, motor2, 80, 'abs')
+MF.move_motor(nanolib_helper, motor3, 100, 'abs')
+MF.move_motor(nanolib_helper, motor4, 70, 'abs')
+MF.move_motor(nanolib_helper, motor5, 130, 'abs')
+MF.move_motor(nanolib_helper, motor6, 20, 'abs')
 
 # time.sleep(3)
-
-MF.move_motor(nanolib_helper, motor1, 0, 'abs')
-MF.move_motor(nanolib_helper, motor2, 0, 'abs')
-MF.move_motor(nanolib_helper, motor3, 0, 'abs')
-MF.move_motor(nanolib_helper, motor4, 0, 'abs')
-MF.move_motor(nanolib_helper, motor5, 0, 'abs')
-MF.move_motor(nanolib_helper, motor6, 0, 'abs')
+# -400 position is due to keyhole not being vertical for the lever arms
+# This will change for the real metal lever arms
+# MF.move_motor(nanolib_helper, motor1, -400, 'abs')
+# MF.move_motor(nanolib_helper, motor2, -400, 'abs')
+# MF.move_motor(nanolib_helper, motor3, -400, 'abs')
+# MF.move_motor(nanolib_helper, motor4, -400, 'abs')
+# MF.move_motor(nanolib_helper, motor5, -400, 'abs')
+# MF.move_motor(nanolib_helper, motor6, -400, 'abs')
 
 
 time.sleep(2) 
@@ -159,12 +160,12 @@ while True:
         f.write(str(angles) + "\n")
         if(angles[0] != -99999):
             
-            MF.move_motor(nanolib_helper, motor1, int(angles[0])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor2, int(angles[1])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor3, int(angles[2])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor4, int(angles[3])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor5, int(angles[4])*gear_ratio, 'abs')
-            MF.move_motor(nanolib_helper, motor6, int(angles[5])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor1, 50 + int(angles[0])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor2, 80 + int(angles[1])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor3, 100 + int(angles[2])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor4, 70 + int(angles[3])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor5, 130 + int(angles[4])*gear_ratio, 'abs')
+            MF.move_motor(nanolib_helper, motor6, 20 + int(angles[5])*gear_ratio, 'abs')
         
 
 
