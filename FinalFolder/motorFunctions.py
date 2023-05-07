@@ -1,4 +1,5 @@
-# This program is a module of necessary motor functions needed to use a Nanotec Motor controller
+# This program is a module of necessary motor functions needed to use a Nanotec Motor controller.
+# Everything that is used to control these motor controllers currently is with respect to the Profile Position Mode. Feel free to look into the other Modes of the controller as they may be useful.
 
 import sys
 import socket
@@ -25,9 +26,12 @@ from nanolib_sampler_example import SamplerExample
 def setMaxSpeed(nanolib_helper, device_handle, maxSpeed):
     print("Setting max motor speed to ", maxSpeed)
     
+    # This is needed to access the object dictionary of the controller
     object_dictionary = nanolib_helper.get_device_object_dictionary(device_handle)
 
+    # The first write function is setting the profile mode index to a default. Without this, the controller will not be able to update the max speed. Think of it as a clutch in a stick shift car.
     nanolib_helper.write_number_od(object_dictionary, 22, Nanolib.OdIndex(0x6040, 0x00))
+    # This function is writing the desired max speed into the max speed object
     nanolib_helper.write_number_od(object_dictionary, maxSpeed, Nanolib.OdIndex(0x6080, 0x00))
 
 # Set the motor acceleration

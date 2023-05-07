@@ -52,7 +52,7 @@ MF.setAcceleration(nanolib_helper, motor5, 1000)
 MF.setAcceleration(nanolib_helper, motor6, 1000)
 
 # Move the motor to position 0 before beginning
-# May remove for actual demonstration
+# This will change depending on what the abs 0 position for the motors are.
 MF.move_motor(nanolib_helper, motor1, 50, 'abs')
 MF.move_motor(nanolib_helper, motor2, 80, 'abs')
 MF.move_motor(nanolib_helper, motor3, 100, 'abs')
@@ -87,6 +87,7 @@ serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 port = 7000   # Default port for socket
 
+# Connecting the server IP with its port
 serv.bind(('127.0.0.1', port))
 print("socket binded to %s" %(port))
 
@@ -121,9 +122,16 @@ while True:
         #     conn.close()
         #     print("\nClosed everything successfully\n")
         #     sys.exit()
+
+        # Data is sent to the server in bits, so need to decode() to read it as string
         data = data.decode()
-        # print("Client says: "+ data)
+        
         # Take in data and convert to floats and send to Kuskode
+        ##################################################################################################################################
+
+        # This whole section is very INEFFICIENT. It takes about 250ms for the Python to run through a set of data. This causes problems because the VR sends data raround 5-10 ms. 
+        # Need to find a faster way to take data and run through it to make the motion smoother.
+
         # data = pickle.loads(data)
         # print("DATA = ", data)
         # Data is taken in as a string but contains P=1234.0 Y=1234.0 R=1234.0 . Need to Remove the Letters and ='s
@@ -151,14 +159,19 @@ while True:
         # print('pitch', pitch)
         # print('roll', roll)
 
-        # Input Kuskode here
+        # Input Kuskode function here
         # First 3 parameters are x,y,z translation. Not needed currently so set to 0. z is set to 25.5 since the platform is set 25.5 in off the ground
         # 4th parameter is yaw. We don't consider yaw so set it to 0 for now.
         angles = kine.get_inv_kine(0, 0, 25.5, 0, pitch, roll, False, True, True)
         print('angles = ', angles)
+        # gear ratio is needed because it reduces the platform angle change. Currently it is set to 10 but is expected to be 30:1
         gear_ratio = 10
+
+        # This file is storing the angles that the motors go through during the simulation. Not actually necessary since it's only used for debugging.
         f.write(str(angles) + "\n")
-        if(angles[0] != -99999):
+        # This if condition is to catch whenever the simulation exceeds the platform's capabilities. For example, in a barrel roll, the kinematics function will essentially apply a Penalty Method to the output. 
+        # If this happens, the motors will simply stop moving until a valid output is obtained
+        if(angles[0] != -99999):    
             
             MF.move_motor(nanolib_helper, motor1, 50 + int(angles[0])*gear_ratio, 'abs')
             MF.move_motor(nanolib_helper, motor2, 80 + int(angles[1])*gear_ratio, 'abs')
@@ -177,8 +190,5 @@ while True:
 # # Disconnect the motor
 # nanolib_helper.disconnect_device(motor1)
 # nanolib_helper.disconnect_device(motor2)
-
-# # bus_hw_id isnt accessible bc it is inside the scope of the connect_motor() function
-# # nanolib_helper.close_bus_hardware(bus_hw_id)
 
 # print("Closing everything successfully")
